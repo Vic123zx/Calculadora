@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            color: #fff;
+        }
+
+        #calculator {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 250px; /* Ajuste el ancho según sea necesario */
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        #calculator-title {
+            background-color: #2980b9;
+            color: #fff;
+            padding: 15px;
+            font-size: 18px; /* Ajuste el tamaño del título según sea necesario */
+        }
+
+        #calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            padding: 15px; /* Ajuste el relleno según sea necesario */
+            text-align: center;
+        }
+
+        input {
+            width: calc(100% - 20px); /* Ajuste el ancho según sea necesario */
+            padding: 10px; /* Ajuste el relleno según sea necesario */
+            margin: 10px; /* Ajuste el margen según sea necesario */
+            font-size: 18px; /* Ajuste el tamaño de la fuente según sea necesario */
+            border: none;
+            border-bottom: 2px solid #ddd;
+            outline: none;
+            text-align: right;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            width: 100%;
+            height: 50px; /* Ajuste la altura según sea necesario */
+            font-size: 18px; /* Ajuste el tamaño de la fuente según sea necesario */
+            margin: 5px; /* Ajuste el margen según sea necesario */
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            background-color: #eee;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        button.operator {
+            background-color: #f7931e;
+            color: #fff;
+        }
+
+        button.operator:hover {
+            background-color: #da821b;
+        }
+
+        #mode-toggle {
+            margin-top: 10px; /* Ajuste el margen superior según sea necesario */
+            background-color: #2980b9;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #mode-toggle:hover {
+            background-color: #3498db;
+        }
+
+        #mode-icon {
+            font-size: 24px; /* Ajuste el tamaño del ícono según sea necesario */
+        }
+
+        /* Modo Oscuro */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #fff;
+        }
+
+        #calculator.dark-mode {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+        }
+
+        input.dark-mode {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* Animación de clic */
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+        <div id="calculator">
+            <div id="calculator-title">Calculadora</div>
+            <input type="text" id="display" readonly>
+            <div id="calculator-buttons">
+                <button onclick="appendToDisplay('7')" class="clickable">7</button>
+                <button onclick="appendToDisplay('8')" class="clickable">8</button>
+                <button onclick="appendToDisplay('9')" class="clickable">9</button>
+                <button class="operator clickable" onclick="appendToDisplay('/')">/</button>
+                <button onclick="appendToDisplay('4')" class="clickable">4</button>
+                <button onclick="appendToDisplay('5')" class="clickable">5</button>
+                <button onclick="appendToDisplay('6')" class="clickable">6</button>
+                <button class="operator clickable" onclick="appendToDisplay('*')">*</button>
+                <button onclick="appendToDisplay('1')" class="clickable">1</button>
+                <button onclick="appendToDisplay('2')" class="clickable">2</button>
+                <button onclick="appendToDisplay('3')" class="clickable">3</button>
+                <button class="operator clickable" onclick="appendToDisplay('-')">-</button>
+                <button onclick="appendToDisplay('0')" class="clickable">0</button>
+                <button onclick="appendToDisplay('.')">.</button>
+                <button class="operator clickable" onclick="calculate()">=</button>
+                <button class="operator clickable" onclick="appendToDisplay('+')">+</button>
+                <button id="delete-btn" class="clickable" onclick="deleteLast()">⌫</button>
+                <button class="operator clickable" onclick="clearDisplay()">C</button>              
+    <button id="mode-toggle" onclick="toggleMode()">
+        <span id="mode-icon">&#9728;</span> <!-- Icono de sol para claro y luna para oscuro -->
+    </button>
+</div>
+
+<audio id="clickSound" src="click.mp3.mp4"></audio>
+
+<script>
+    function appendToDisplay(value) {
+        document.getElementById('display').value += value;
+        playClickSound();
+    }
+
+    function calculate() {
+        try {
+            document.getElementById('display').value = eval(document.getElementById('display').value);
+            playClickSound();
+        } catch (error) {
+            document.getElementById('display').value = 'Error';
+        }
+    }
+
+    function clearDisplay() {
+        document.getElementById('display').value = '';
+        playClickSound();
+    }
+
+    function playClickSound() {
+        var audio = new Audio('click.mp3.mp4');
+        audio.play();
+    }
+
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.getElementById('calculator').classList.toggle('dark-mode');
+        document.getElementById('display').classList.toggle('dark-mode');
+    }
+    function deleteLast() {
+    var currentValue = document.getElementById('display').value;
+    document.getElementById('display').value = currentValue.slice(0, -1);
+    playClickSound();
+}
+
+function playClickSound() {
+    var audio = new Audio('click.mp3.mp4');
+    audio.play();
+}
+</script>
+
+</body>
+</html>
